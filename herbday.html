@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday! 🎉</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e64e5 0%, #9fb1cf 50%, #e70d85 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-y: scroll;
+            position: relative;
+        }
+
+        /* Sparkles Background */
+        .sparkle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 2s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+        }
+
+        /* Gift Box Container */
+        .gift-container {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .gift-box {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.8s ease;
+        }
+
+        /* Box Body */
+        .box-body {
+            position: absolute;
+            bottom: 0;
+            width: 280px;
+            height: 180px;
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            border-radius: 8px;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.4),
+                inset 0 -5px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Box Lid */
+        .box-lid {
+            position: absolute;
+            top: 0;
+            width: 280px;
+            height: 100px;
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            border-radius: 8px 8px 0 0;
+            box-shadow: 
+                0 10px 30px rgba(0,0,0,0.3),
+                inset 0 5px 20px rgba(255,255,255,0.1);
+            transform-origin: bottom;
+            transition: all 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 5;
+        }
+
+        .box-lid::before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), transparent);
+        }
+
+        /* Ribbon Vertical */
+        .ribbon-vertical {
+            position: absolute;
+            width: 50px;
+            height: 100%;
+            background: linear-gradient(to right, #f89c09, #f1c40f);
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 
+                inset -3px 0 5px rgba(0,0,0,0.2),
+                inset 3px 0 5px rgba(255,255,255,0.2);
+            z-index: 4;
+        }
+
+        /* Ribbon Horizontal */
+        .ribbon-horizontal {
+            position: absolute;
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(to bottom, #f39c12, #f1c40f);
+            top: 25px;
+            box-shadow: 
+                inset 0 -3px 5px rgba(0,0,0,0.2),
+                inset 0 3px 5px rgba(255,255,255,0.2);
+            z-index: 4;
+        }
+
+        /* Bow */
+        .bow {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 6;
+        }
+
+        .bow-left, .bow-right {
+            position: absolute;
+            width: 50px;
+            height: 60px;
+            background: radial-gradient(circle at center, #f1c40f, #f39c12);
+            border-radius: 50% 50% 50% 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .bow-left {
+            transform: rotate(-45deg);
+            left: -35px;
+        }
+
+        .bow-right {
+            transform: rotate(135deg) scaleX(-1);
+            right: -35px;
+        }
+
+        .bow-center {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle at center, #f1c40f, #e67e22);
+            border-radius: 50%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            z-index: 7;
+        }
+
+        /* Open Button */
+        .open-button {
+            background: rgba(255, 255, 255, 0.95);
+            color: #e74c3c;
+            border: none;
+            padding: 25px 60px;
+            font-size: 42px;
+            font-weight: 900;
+            font-family: 'Impact', sans-serif;
+            letter-spacing: 10px;
+            cursor: pointer;
+            border-radius: 20px;
+            box-shadow: 
+                0 15px 40px rgba(0,0,0,0.4),
+                inset 0 -3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .open-button:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 20px 50px rgba(0,0,0,0.5),
+                inset 0 -3px 10px rgba(0,0,0,0.1);
+        }
+
+        .open-button:active {
+            transform: scale(0.98);
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            }
+            50% { 
+                transform: scale(1.03);
+                box-shadow: 0 20px 50px rgba(231, 76, 60, 0.4);
+            }
+        }
+
+        .open-button.hide {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0);
+        }
+
+        /* Opened State */
+        .gift-box.opened .box-lid {
+            transform: rotateX(-140deg) translateY(-20px);
+        }
+
+        .gift-box.opened .ribbon-vertical,
+        .gift-box.opened .ribbon-horizontal,
+        .gift-box.opened .bow {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Letter */
+        .letter-envelope {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 450px;
+            max-width: 90vw;
+            height: 550px;
+            max-height: 85vh;
+            transition: all 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 200;
+            opacity: 0;
+        }
+
+        .letter-envelope.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #fff9e6;
+            border-radius: 15px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+            padding: 40px 35px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .envelope:hover {
+            transform: scale(1.02);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.5);
+        }
+
+        .envelope::before {
+            content: '✉️';
+            position: absolute;
+            top: -25px;
+            right: 20px;
+            font-size: 35px;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .letter-paper {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #fffef7, #fff9e6);
+            border: 3px solid #f39c12;
+            border-radius: 10px;
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+            overflow-y: auto;
+        }
+
+        .letter-paper h1 {
+            font-size: 32px;
+            color: #e74c3c;
+            margin-bottom: 20px;
+            font-weight: 900;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: rainbow 3s linear infinite;
+        }
+
+        @keyframes rainbow {
+            0%, 100% { color: #e74c3c; }
+            25% { color: #f39c12; }
+            50% { color: #27ae60; }
+            75% { color: #3498db; }
+        }
+
+        .letter-paper p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .letter-paper .heart {
+            font-size: 28px;
+            margin: 12px 0;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1); }
+        }
+
+        .letter-paper .signature {
+            margin-top: 20px;
+            font-size: 18px;
+            font-style: italic;
+            color: #8e44ad;
+            font-weight: 600;
+        }
+
+        .letter-paper .tap-hint {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #95a5a6;
+            font-style: italic;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Confetti */
+        .confetti-piece {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* Balloons */
+        .balloon {
+            position: fixed;
+            width: 60px;
+            height: 75px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 30px;
+            background: rgba(255,255,255,0.5);
+        }
+
+        /* Mobile Responsive */
+        @media (max-height: 700px) {
+            .letter-envelope {
+                height: 500px;
+            }
+            .letter-paper h1 {
+                font-size: 28px;
+                margin-bottom: 15px;
+            }
+            .letter-paper p {
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Gift Box -->
+        <div class="gift-container">
+            <div class="gift-box" id="giftBox">
+                <div class="box-lid">
+                    <div class="bow">
+                        <div class="bow-left"></div>
+                        <div class="bow-right"></div>
+                        <div class="bow-center"></div>
+                    </div>
+                </div>
+                <div class="ribbon-vertical"></div>
+                <div class="ribbon-horizontal"></div>
+                <div class="box-body"></div>
+            </div>
+        </div>
+
+        <!-- Open Button (di bawah kotak) -->
+        <button class="open-button" id="openBtn">OPEN</button>
+    </div>
+
+    <!-- Letter (muncul di tengah layar) -->
+    <div class="letter-envelope" id="letterEnvelope">
+        <div class="envelope" id="envelope">
+            <div class="letter-paper">
+                <h1>🎉 HAPPY BIRTHDAY! 🎉</h1>
+                <div class="heart">❤️</div>
+                <p>Selamat ulang tahun untuk orang yang paling spesial!</p>
+                <p>Semoga hari ini penuh dengan kebahagiaan,</p>
+                <p>tawa, dan momen-momen indah yang tak terlupakan.</p>
+                <p>Terima kasih sudah menjadi teman terbaik!</p>
+                <p>Semoga semua impianmu tercapai tahun ini.</p>
+                <div class="heart">💝</div>
+                <p class="signature">— Dengan cinta, Sahabatmu 💕</p>
+                <p class="tap-hint">✨ Klik surat untuk musik ✨</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const openBtn = document.getElementById('openBtn');
+        const giftBox = document.getElementById('giftBox');
+        const letterEnvelope = document.getElementById('letterEnvelope');
+        const envelope = document.getElementById('envelope');
+
+        let musicPlaying = false;
+        let audioContext;
+        
+        // Create sparkles background
+        function createSparkles() {
+            for (let i = 0; i < 30; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(sparkle);
+            }
+        }
+        createSparkles();
+
+        // Open button click
+        openBtn.addEventListener('click', function() {
+            openBtn.classList.add('hide');
+            giftBox.classList.add('opened');
+            
+            setTimeout(() => {
+                letterEnvelope.classList.add('show');
+                createConfetti();
+                createBalloons();
+            }, 1000);
+        });
+
+        // Letter click - play Happy Birthday
+        envelope.addEventListener('click', function() {
+            if (!musicPlaying) {
+                playHappyBirthday();
+                musicPlaying = true;
+                envelope.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    envelope.style.transform = 'scale(1)';
+                }, 200);
+            }
+        });
+
+        // Play Happy Birthday using Web Audio API
+        function playHappyBirthday() {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Happy Birthday melody (note frequencies and durations)
+            const melody = [
+                // "Happy birthday to you"
+                {note: 'G4', duration: 0.25},
+                {note: 'G4', duration: 0.25},
+                {note: 'A4', duration: 0.5},
+                {note: 'G4', duration: 0.5},
+                {note: 'C5', duration: 0.5},
+                {note: 'B4', duration: 1},
+                
+                // "Happy birthday to you"
+                {note: 'G4', duration: 0.25},
+                {note: 'G4', duration: 0.25},
+                {note: 'A4', duration: 0.5},
+                {note: 'G4', duration: 0.5},
+                {note: 'D5', duration: 0.5},
+                {note: 'C5', duration: 1},
+                
+                // "Happy birthday dear [name]"
+                {note: 'G4', duration: 0.25},
+                {note: 'G4', duration: 0.25},
+                {note: 'G5', duration: 0.5},
+                {note: 'E5', duration: 0.5},
+                {note: 'C5', duration: 0.5},
+                {note: 'B4', duration: 0.5},
+                {note: 'A4', duration: 0.5},
+                
+                // "Happy birthday to you"
+                {note: 'F5', duration: 0.25},
+                {note: 'F5', duration: 0.25},
+                {note: 'E5', duration: 0.5},
+                {note: 'C5', duration: 0.5},
+                {note: 'D5', duration: 0.5},
+                {note: 'C5', duration: 1}
+            ];
+            
+            const noteFrequencies = {
+                'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23,
+                'G4': 392.00, 'A4': 440.00, 'B4': 493.88,
+                'C5': 523.25, 'D5': 587.33, 'E5': 659.25, 'F5': 698.46,
+                'G5': 783.99, 'A5': 880.00
+            };
+            
+            let currentTime = audioContext.currentTime;
+            
+            melody.forEach(({note, duration}) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = noteFrequencies[note];
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, currentTime + duration);
+                
+                oscillator.start(currentTime);
+                oscillator.stop(currentTime + duration);
+                
+                currentTime += duration;
+            });
+            
+            // Reset music playing after song ends
+            setTimeout(() => {
+                musicPlaying = false;
+            }, currentTime * 1000);
+        }
+
+        // Create confetti
+        function createConfetti() {
+            const colors = ['#e74c3c', '#f39c12', '#27ae60', '#3498db', '#9b59b6', '#e91e63'];
+            const shapes = ['circle', 'square'];
+            
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti-piece';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = -20 + 'px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)] === 'circle' ? '50%' : '0';
+                    confetti.style.opacity = Math.random() * 0.5 + 0.5;
+                    
+                    document.body.appendChild(confetti);
+                    
+                    // Animate confetti falling
+                    let posY = -20;
+                    let posX = parseInt(confetti.style.left);
+                    let rotation = 0;
+                    
+                    const fallInterval = setInterval(() => {
+                        posY += 5;
+                        posX += Math.sin(posY / 30) * 2;
+                        rotation += 5;
+                        
+                        confetti.style.top = posY + 'px';
+                        confetti.style.left = posX + 'px';
+                        confetti.style.transform = `rotate(${rotation}deg)`;
+                        
+                        if (posY > window.innerHeight) {
+                            clearInterval(fallInterval);
+                            confetti.remove();
+                        }
+                    }, 30);
+                }, i * 30);
+            }
+        }
+
+        // Create balloons
+        function createBalloons() {
+            const colors = ['#e74c3c', '#f39c12', '#27ae60', '#3498db', '#9b59b6', '#e91e63'];
+            
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const balloon = document.createElement('div');
+                    balloon.className = 'balloon';
+                    balloon.style.left = Math.random() * 100 + 'vw';
+                    balloon.style.bottom = -100 + 'px';
+                    balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    balloon.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                    
+                    document.body.appendChild(balloon);
+                    
+                    // Animate balloon floating up
+                    let posY = -100;
+                    const floatInterval = setInterval(() => {
+                        posY += 2;
+                        balloon.style.bottom = posY + 'px';
+                        balloon.style.transform = `translateX(${Math.sin(posY / 50) * 30}px)`;
+                        
+                        if (posY > window.innerHeight + 100) {
+                            clearInterval(floatInterval);
+                            balloon.remove();
+                        }
+                    }, 30);
+                }, i * 200);
+            }
+        }
+    </script>
+</body>
+</html>
